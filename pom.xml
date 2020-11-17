@@ -53,6 +53,11 @@
 			<artifactId>mariadb-java-client</artifactId>
 			<version>2.7.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.corundumstudio.socketio</groupId>
+			<artifactId>netty-socketio</artifactId>
+			<version>1.7.12</version>
+		</dependency>
 	</dependencies>
 
 	<build>
