@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  backend:
+    build: .
+    image: my-rules-card-game-backend-image
+    container_name: cardgame-backend
+    ports:
+      - "5001:8080"
+      - "5002:5002"

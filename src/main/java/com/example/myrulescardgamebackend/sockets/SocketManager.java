@@ -17,7 +17,7 @@ public class SocketManager {
     }
 
     public void init(){
-        config.setPort(6003);
+        config.setPort(5002);
         config.setContext("/sockets");
 
         server = new SocketIOServer(config);
