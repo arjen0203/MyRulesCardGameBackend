@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.example.myrulescardgamebackend.sockets.domain.HostGame;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,6 +29,10 @@ public class SocketManager {
 
         server.addConnectListener((socket) -> {
             System.out.println("A socket has joined");
+        });
+
+        server.addEventListener("Host", HostGame.class, (socket, data, ackRequest) -> {
+
         });
 
         server.start();
