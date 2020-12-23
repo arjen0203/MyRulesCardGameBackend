@@ -33,15 +33,22 @@ public class SocketManager {
         server.addDisconnectListener((socket) -> {
             Lobby lobby = lobbyManager.getLobbyBySocket(socket);
 
+            if (lobby == null) return;
+
             lobby.removePlayer(lobbyManager.getPlayerBySocket(socket));
 
-            if (lobby.getHost() == socket) {
+            if (lobby.getHost().getSocket() == socket) {
                 for (Player player: lobby.getPlayers()) {
+                    lobbyManager.removePlayerBySocket(player.getSocket());
                     player.getSocket().sendEvent("lobbyEnded");
                 }
-            }
-            lobbyManager.removeLobby(lobby.getCode());
 
+                lobbyManager.removeLobby(lobby.getCode());
+            } else {
+                sendLobbyDataByLobby(lobby);
+            }
+
+            lobbyManager.removePlayerBySocket(socket);
             System.out.println("A socket has left");
         });
 
@@ -65,6 +72,11 @@ public class SocketManager {
                 return;
             }
 
+            if (lobbyManager.nameExistsInLobby(data.screenName, lobbyManager.getLobbyByCode(data.code))) {
+                socket.sendEvent("joinFailed", new Error("name already exists within lobby"));
+                return;
+            }
+
             boolean succes = lobbyManager.JoinLobby(socket, data.code, data.screenName);
 
             if (!succes) {
@@ -76,17 +88,7 @@ public class SocketManager {
 
             Lobby lobby = lobbyManager.getLobbyBySocket(socket);
 
-            ArrayList<PlayerData> playersData = new ArrayList<PlayerData>();
-            for (Player player: lobby.getPlayers()) {
-                playersData.add(new PlayerData(player.getName()));
-            }
-            LobbyData lobbyData = new LobbyData(lobby.getCode(), playersData);
-
-            for (Player player: lobby.getPlayers()) {
-                if (player == lobby.getHost()) lobbyData.setHost(true);
-
-                player.getSocket().sendEvent("lobbyData", lobbyData);
-            }
+            sendLobbyDataByLobby(lobby);
         });
 
         server.addEventListener("getLobby", String.class, (socket, data, ackRequest) -> {
@@ -96,7 +98,7 @@ public class SocketManager {
 
             ArrayList<PlayerData> playersData = new ArrayList<PlayerData>();
             for (Player player: lobby.getPlayers()) {
-                playersData.add(new PlayerData(player.getName()));
+                playersData.add(new PlayerData(player.getName(), player.getSocket().getSessionId()));
             }
 
             LobbyData lobbyData = new LobbyData(lobby.getCode(), playersData);
@@ -105,7 +107,33 @@ public class SocketManager {
             socket.sendEvent("lobbyData", lobbyData);
         });
 
+        server.addEventListener("kickPlayer", PlayerData.class, (socket, data, ackRequest) -> {
+            Lobby lobby = lobbyManager.getLobbyBySocket(socket);
+            if (lobby == null) return;
+            if (lobby.getHost().getSocket() != socket) return;
+            Player kickPlayer = lobbyManager.getPlayerByUUID(data.uuid);
+            if (kickPlayer.getSocket() == socket) return;
+            lobby.removePlayer(kickPlayer);
+            lobbyManager.removePlayerBySocket(kickPlayer.getSocket());
+            kickPlayer.getSocket().sendEvent("kicked");
+
+            sendLobbyDataByLobby(lobby);
+        });
+
         server.start();
     }
 
+    private void sendLobbyDataByLobby(Lobby lobby) {
+        ArrayList<PlayerData> playersData = new ArrayList<PlayerData>();
+        for (Player player: lobby.getPlayers()) {
+            playersData.add(new PlayerData(player.getName(), player.getSocket().getSessionId()));
+        }
+        LobbyData lobbyData = new LobbyData(lobby.getCode(), playersData);
+
+        for (Player player: lobby.getPlayers()) {
+            if (player == lobby.getHost()) lobbyData.setHost(true);
+
+            player.getSocket().sendEvent("lobbyData", lobbyData);
+        }
+    }
 }

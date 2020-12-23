@@ -41,6 +41,24 @@ public class LobbyManager {
         return players.get(socket.getSessionId());
     }
 
+    public Player getPlayerByUUID(UUID uuid) {
+        return players.get(uuid);
+    }
+
+    public void removePlayerBySocket(SocketIOClient socket) {
+        players.remove(socket.getSessionId());
+    }
+
+    public Lobby getLobbyByCode(String code) {
+        return lobbys.get(code);
+    }
+
+    public boolean nameExistsInLobby(String name, Lobby lobby){
+        for (Player player: lobby.getPlayers()) {
+            if (player.getName().equals(name)) return true;
+        }
+        return false;
+    }
 
     public String generateCode() {
         int leftLimit = 48; // numeral '0'
