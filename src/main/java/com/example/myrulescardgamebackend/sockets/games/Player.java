@@ -13,6 +13,8 @@ public class Player {
     Game game;
     Lobby lobby;
 
+    public Player() {}
+
     public Player(String name, SocketIOClient socket, Lobby lobby) {
         this.name = name;
         this.socket = socket;
@@ -33,6 +35,10 @@ public class Player {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public String getName() {

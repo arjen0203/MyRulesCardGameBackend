@@ -11,9 +11,18 @@ public class GameState {
     public Card topCard;
     public ArrayList<Player> players;
     public ArrayList<Player> turnOrder;
+    public Player currentPlayer;
 
     public ArrayList<Card> getPickPile() {
         return pickPile;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public ArrayList<Card> getDiscardPile() {

@@ -4,11 +4,17 @@ import java.util.ArrayList;
 
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.sockets.domain.CardData;
+import com.example.myrulescardgamebackend.sockets.domain.GameStateData;
 import com.example.myrulescardgamebackend.sockets.domain.HostGame;
 import com.example.myrulescardgamebackend.sockets.domain.joinLobby;
 import com.example.myrulescardgamebackend.sockets.domain.LobbyData;
 import com.example.myrulescardgamebackend.sockets.domain.PlayerData;
+import com.example.myrulescardgamebackend.sockets.games.Game;
+import com.example.myrulescardgamebackend.sockets.games.GameManager;
 import com.example.myrulescardgamebackend.sockets.games.Player;
+import com.example.myrulescardgamebackend.sockets.games.rules.RuleSet;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,9 +22,11 @@ public class SocketManager {
     SocketIOServer server;
     Configuration config;
     LobbyManager lobbyManager;
+    GameManager gameManager;
 
     public SocketManager() {
         config = new Configuration();
+        gameManager = new GameManager();
         lobbyManager = new LobbyManager();
         this.init();
     }
@@ -60,7 +68,11 @@ public class SocketManager {
             if (data.hostName.length() < 3) return;
             //todo add global error socket
 
-            lobbyManager.CreateLobby(socket, data.hostName);
+            //todo add getting the ruleSetData
+            RuleSet ruleSet = gameManager.createRuleSet(null);
+            Game game = gameManager.createGame(ruleSet);
+
+            lobbyManager.CreateLobby(socket, data.hostName, game);
 
             socket.sendEvent("hostSucces");
             System.out.println("lobby created succes");
@@ -125,7 +137,38 @@ public class SocketManager {
             if (lobby == null) return;
             if (lobby.getHost().getSocket() != socket) return;
 
+            Game game = lobby.getGame();
+            gameManager.addPlayersToGame(game, lobby.getPlayers());
 
+            game.initGame();
+
+            for (Player player: game.getGameState().getPlayers()) {
+                player.getSocket().sendEvent("gameStarted");
+            }
+        });
+
+        server.addEventListener("getGameState", String.class, (socket, data, ackRequest) -> {
+            if (lobbyManager.getPlayerBySocket(socket) == null) return;
+            Player currentPlayer = lobbyManager.getPlayerBySocket(socket);
+            if (currentPlayer.getGame() == null) return;
+            Game game = currentPlayer.getGame();
+
+            //todo move this to seperate function
+            ArrayList<PlayerData> playersData = new ArrayList<>();
+            for (Player player: game.getGameState().getPlayers()) {
+                playersData.add(new PlayerData(player.getName(), player.getCards().size(),
+                        (game.getGameState().getCurrentPlayer() == player)));
+            }
+            boolean isTurn = (currentPlayer == game.getGameState().getCurrentPlayer());
+            ArrayList<CardData> cards = new ArrayList<>();
+            for (Card card: currentPlayer.getCards()) {
+                cards.add(new CardData(card));
+            }
+            Card currentCard = game.getGameState().getTopCard();
+
+            GameStateData gameStateData = new GameStateData(playersData, isTurn, cards, currentCard);
+
+            socket.sendEvent("gameState", gameStateData);
         });
 
         server.start();

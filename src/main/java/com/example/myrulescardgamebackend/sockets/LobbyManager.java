@@ -6,14 +6,15 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import com.example.myrulescardgamebackend.sockets.games.Game;
 import com.example.myrulescardgamebackend.sockets.games.Player;
 
 public class LobbyManager {
     HashMap<String, Lobby> lobbys = new HashMap<>();
     HashMap<UUID, Player> players = new HashMap<>();
 
-    public void CreateLobby(SocketIOClient socket, String hostName) {
-        Lobby lobby = new Lobby(generateCode());
+    public void CreateLobby(SocketIOClient socket, String hostName, Game game) {
+        Lobby lobby = new Lobby(generateCode(), game);
         Player host = new Player(hostName, socket, lobby);
         lobby.setHost(host);
         lobby.addPlayer(host);

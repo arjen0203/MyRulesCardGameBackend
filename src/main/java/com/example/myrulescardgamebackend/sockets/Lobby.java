@@ -13,14 +13,14 @@ public class Lobby {
     private Player host;
     private Game game;
 
-    Lobby(String code) {
+    Lobby(String code, Game game) {
         players = new ArrayList<>();
         this.code = code;
+        this.game = game;
     }
 
     public void addPlayer(Player player) {
         players.add(player);
-        player.setGame(this.game);
     }
 
     public ArrayList<Player> getPlayers() {
@@ -41,5 +41,9 @@ public class Lobby {
 
     public void removePlayer(Player player) {
         players.remove(player);
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

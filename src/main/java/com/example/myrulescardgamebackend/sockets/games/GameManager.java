@@ -6,7 +6,10 @@ import java.util.Collections;
 
 import com.example.myrulescardgamebackend.CardEnums;
 import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.sockets.domain.RuleSetData;
 import com.example.myrulescardgamebackend.sockets.games.rules.Rule;
+import com.example.myrulescardgamebackend.sockets.games.rules.RuleSet;
+import com.example.myrulescardgamebackend.sockets.games.rules.SkipRule;
 
 public class GameManager {
     Card[][] cardsLookupTable;
@@ -70,10 +73,19 @@ public class GameManager {
         };
     }
 
-    public Game createGame(ArrayList<Rule> rules) {
+    public Game createGame(RuleSet ruleSet) {
         Game game = new Game();
-        game.setPickPile(createGameDeckWithRules(rules));
+        game.setPickPile(createGameDeckWithRules(ruleSet.getRules()));
+
         return game;
+    }
+
+    public void addPlayersToGame(Game game, ArrayList<Player> players) {
+        game.setPlayers(players);
+
+        for (Player player: players) {
+            player.setGame(game);
+        }
     }
 
     public ArrayList<Card> createGameDeckWithRules(ArrayList<Rule> rules) {
@@ -93,5 +105,13 @@ public class GameManager {
         Collections.shuffle(deckWithRules);
 
         return deckWithRules;
+    }
+
+    public RuleSet createRuleSet(RuleSetData data) {
+        //todo ad actual rules creating function
+        ArrayList<Rule> rules = new ArrayList<>();
+        RuleSet ruleSet = new RuleSet(rules);
+
+        return ruleSet;
     }
 }
