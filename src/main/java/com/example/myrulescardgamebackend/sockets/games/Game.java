@@ -9,17 +9,23 @@ import com.example.myrulescardgamebackend.sockets.domain.Card;
 public class Game {
     GameState gameState = new GameState();
 
-    //add rules being added
-    public void initPickPile() {
-        for (int suit = 0; suit < 4; suit++) {
-            for (int value = 0; value < 12; value++) {
-                gameState.getPickPile().add(new Card(suit, value));
-            }
-        }
-        gameState.getPickPile().add(new Card(CardEnums.Suit.JOKER, CardEnums.Value.JOKER1));
-
+    public void shufflePickPile() {
         Collections.shuffle(gameState.getPickPile());
     }
 
+    public void setPickPile(ArrayList<Card> pickPile) {
+        this.gameState.setPickPile(pickPile);
+    }
 
+    public void setPlayers(ArrayList<Player> players) {
+        this.gameState.setPlayers(players);
+    }
+
+    public ArrayList<Player> getWinners() {
+        ArrayList<Player> winners = new ArrayList<Player>();
+        for (Player player: this.gameState.getPlayers()) {
+            if (player.getCards().size() < 1) winners.add(player);
+        }
+        return winners;
+    }
 }

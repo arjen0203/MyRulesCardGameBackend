@@ -120,6 +120,14 @@ public class SocketManager {
             sendLobbyDataByLobby(lobby);
         });
 
+        server.addEventListener("startGame", String.class, (socket, data, ackRequest) -> {
+            Lobby lobby = lobbyManager.getLobbyBySocket(socket);
+            if (lobby == null) return;
+            if (lobby.getHost().getSocket() != socket) return;
+
+
+        });
+
         server.start();
     }
 
