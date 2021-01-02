@@ -24,6 +24,10 @@ public class Card {
         this.rules.add(rule);
     }
 
+    public ArrayList<Rule> getRules() {
+        return rules;
+    }
+
     public Card(CardEnums.Suit suit, CardEnums.Value value) {
         this.suit = suit.getSuit();
         this.value = value.getValue();

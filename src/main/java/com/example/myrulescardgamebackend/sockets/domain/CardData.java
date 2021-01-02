@@ -10,4 +10,12 @@ public class CardData {
         this.suit = card.getSuit();
         this.value = card.getValue();
     }
+
+    public int getValue() {
+        return value;
+    }
+
+    public int getSuit() {
+        return suit;
+    }
 }

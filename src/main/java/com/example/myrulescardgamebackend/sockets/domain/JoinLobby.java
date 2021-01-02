@@ -1,10 +1,10 @@
 package com.example.myrulescardgamebackend.sockets.domain;
 
-public class joinLobby {
+public class JoinLobby {
     public String screenName;
     public String code;
 
-    public joinLobby() {
+    public JoinLobby() {
 
     }
 }

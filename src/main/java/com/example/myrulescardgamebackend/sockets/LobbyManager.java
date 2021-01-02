@@ -22,14 +22,18 @@ public class LobbyManager {
         lobbys.put(lobby.getCode(), lobby);
     }
 
-    public boolean JoinLobby(SocketIOClient socket, String code, String playerName) {
+    public boolean lobbyExists(String code) {
         Lobby lobby = lobbys.get(code);
         if (lobby == null) return false;
+        return true;
+    }
 
+
+    public void joinLobby(SocketIOClient socket, String code, String playerName) {
+        Lobby lobby = lobbys.get(code);
         Player player = new Player(playerName, socket, lobby);
         lobby.addPlayer(player);
         players.put(socket.getSessionId(), player);
-        return true;
     }
 
     public Lobby getLobbyBySocket(SocketIOClient socket) {
