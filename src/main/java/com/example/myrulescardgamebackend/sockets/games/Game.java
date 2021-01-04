@@ -107,7 +107,7 @@ public class Game {
         player.getCards().remove(card);
         if (card.getRules() != null) {
             for (Rule rule: card.getRules()) {
-                rule.doRule(gameState);
+                rule.doRule(this);
             }
         }
         gameState.getDiscardPile().add(gameState.getTopCard());

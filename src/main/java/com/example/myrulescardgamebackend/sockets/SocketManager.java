@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.example.myrulescardgamebackend.CardEnums;
 import com.example.myrulescardgamebackend.sockets.domain.Card;
 import com.example.myrulescardgamebackend.sockets.domain.CardData;
 import com.example.myrulescardgamebackend.sockets.domain.GameStateData;
@@ -12,6 +13,8 @@ import com.example.myrulescardgamebackend.sockets.domain.MessageData;
 import com.example.myrulescardgamebackend.sockets.domain.JoinLobby;
 import com.example.myrulescardgamebackend.sockets.domain.LobbyData;
 import com.example.myrulescardgamebackend.sockets.domain.PlayerData;
+import com.example.myrulescardgamebackend.sockets.domain.RuleAndCards;
+import com.example.myrulescardgamebackend.sockets.domain.RuleSetData;
 import com.example.myrulescardgamebackend.sockets.games.Game;
 import com.example.myrulescardgamebackend.sockets.games.GameManager;
 import com.example.myrulescardgamebackend.sockets.games.Player;
@@ -70,7 +73,7 @@ public class SocketManager {
             //todo add global error socket
 
             //todo add getting the ruleSetData
-            RuleSet ruleSet = gameManager.createRuleSet(null);
+            RuleSet ruleSet = gameManager.createRuleSet(getDefaultRuleSet());
             Game game = gameManager.createGame(ruleSet);
 
             lobbyManager.CreateLobby(socket, data.hostName, game);
@@ -153,7 +156,7 @@ public class SocketManager {
             Game game = currentPlayer.getGame();
 
             ArrayList<PlayerData> playersData = new ArrayList<>();
-            for (Player player: game.getGameState().getPlayers()) {
+            for (Player player: game.getGameState().getTurnOrder()) {
                 playersData.add(new PlayerData(player.getName(), player.getCards().size(),
                         (game.getGameState().getCurrentPlayer() == player)));
             }
@@ -263,7 +266,7 @@ public class SocketManager {
 
     private void sendGameState(Game game) {
         ArrayList<PlayerData> playersData = new ArrayList<>();
-        for (Player player: game.getGameState().getPlayers()) {
+        for (Player player: game.getGameState().getTurnOrder()) {
             playersData.add(new PlayerData(player.getName(), player.getCards().size(),
                     (game.getGameState().getCurrentPlayer() == player)));
         }
@@ -281,5 +284,39 @@ public class SocketManager {
             GameStateData gameStateData = new GameStateData(playersData, isTurn, cards, currentCard);
             player.getSocket().sendEvent("gameState", gameStateData);
         }
+    }
+
+    private RuleSetData getDefaultRuleSet(){
+        ArrayList<RuleAndCards> ruleAndCards = new ArrayList<>();
+
+        ArrayList<Card> skipCards = new ArrayList<>();
+        skipCards.add(new Card(CardEnums.Suit.CLUBS, CardEnums.Value.ACE));
+        skipCards.add(new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.ACE));
+        skipCards.add(new Card(CardEnums.Suit.SPADES, CardEnums.Value.ACE));
+        skipCards.add(new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.ACE));
+        ruleAndCards.add(new RuleAndCards(RuleSetData.RuleEnum.SKIP, skipCards));
+
+        ArrayList<Card> pick1Cards = new ArrayList<>();
+        pick1Cards.add(new Card(CardEnums.Suit.CLUBS, CardEnums.Value.TWO));
+        pick1Cards.add(new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.TWO));
+        pick1Cards.add(new Card(CardEnums.Suit.SPADES, CardEnums.Value.TWO));
+        pick1Cards.add(new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.TWO));
+        ruleAndCards.add(new RuleAndCards(RuleSetData.RuleEnum.PICK1, pick1Cards));
+
+        ArrayList<Card> pick4Cards = new ArrayList<>();
+        pick4Cards.add(new Card(CardEnums.Suit.CLUBS, CardEnums.Value.FOUR));
+        pick4Cards.add(new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.FOUR));
+        pick4Cards.add(new Card(CardEnums.Suit.SPADES, CardEnums.Value.FOUR));
+        pick4Cards.add(new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.FOUR));
+        ruleAndCards.add(new RuleAndCards(RuleSetData.RuleEnum.PICK4, pick4Cards));
+
+        ArrayList<Card> reverseCards = new ArrayList<>();
+        reverseCards.add(new Card(CardEnums.Suit.CLUBS, CardEnums.Value.KING));
+        reverseCards.add(new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.KING));
+        reverseCards.add(new Card(CardEnums.Suit.SPADES, CardEnums.Value.KING));
+        reverseCards.add(new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.KING));
+        ruleAndCards.add(new RuleAndCards(RuleSetData.RuleEnum.REVERSE, reverseCards));
+
+        return new RuleSetData(ruleAndCards);
     }
 }

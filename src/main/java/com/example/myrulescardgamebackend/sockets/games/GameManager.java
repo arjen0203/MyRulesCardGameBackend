@@ -6,7 +6,10 @@ import java.util.Collections;
 
 import com.example.myrulescardgamebackend.CardEnums;
 import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.sockets.domain.RuleAndCards;
 import com.example.myrulescardgamebackend.sockets.domain.RuleSetData;
+import com.example.myrulescardgamebackend.sockets.games.rules.PickRule;
+import com.example.myrulescardgamebackend.sockets.games.rules.ReverseRule;
 import com.example.myrulescardgamebackend.sockets.games.rules.Rule;
 import com.example.myrulescardgamebackend.sockets.games.rules.RuleSet;
 import com.example.myrulescardgamebackend.sockets.games.rules.SkipRule;
@@ -89,7 +92,14 @@ public class GameManager {
     }
 
     public ArrayList<Card> createGameDeckWithRules(ArrayList<Rule> rules) {
-        Card[][] cardWithRules = cardsLookupTable.clone();
+        Card[][] cardWithRules = new Card[cardsLookupTable.length][];
+        for (int i = 0; i < cardsLookupTable.length; i++) {
+            cardWithRules[i] = new Card[cardsLookupTable[i].length];
+            for (int j = 0; j < cardsLookupTable[i].length; j++) {
+                cardWithRules[i][j] = new Card(cardsLookupTable[i][j]);
+            }
+        }
+
         for (Rule rule: rules) {
             for (Card card: rule.getCards()) {
                 cardWithRules[card.getSuit()][card.getValue()].addRule(rule);
@@ -110,6 +120,28 @@ public class GameManager {
     public RuleSet createRuleSet(RuleSetData data) {
         //todo ad actual rules creating function
         ArrayList<Rule> rules = new ArrayList<>();
+        for (RuleAndCards cardRule : data.getCardRules()) {
+            switch (cardRule.getRuleId()) {
+            case SKIP:
+                rules.add(new SkipRule(cardRule.getCards()));
+                break;
+            case PICK1:
+                rules.add(new PickRule(cardRule.getCards(), 1));
+                break;
+            case PICK2:
+                rules.add(new PickRule(cardRule.getCards(), 2));
+                break;
+            case PICK4:
+                rules.add(new PickRule(cardRule.getCards(), 4));
+                break;
+            case REVERSE:
+                rules.add(new ReverseRule(cardRule.getCards()));
+                break;
+            default:
+                break;
+            }
+        }
+
         RuleSet ruleSet = new RuleSet(rules);
 
         return ruleSet;

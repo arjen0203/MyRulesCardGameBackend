@@ -12,12 +12,17 @@ public class Card {
 
     public Card() {}
 
+    public Card(Card card) {
+        this.suit = card.getSuit();
+        this.value = card.getValue();
+    }
+
     public Card(int suit, int value) {
         this.suit = suit;
         this.value = value;
     }
 
-    public void addRules(Rule rule) {
+    public void addRule(Rule rule) {
         if (this.rules == null) {
             this.rules = new ArrayList<Rule>();
         }
@@ -31,10 +36,6 @@ public class Card {
     public Card(CardEnums.Suit suit, CardEnums.Value value) {
         this.suit = suit.getSuit();
         this.value = value.getValue();
-    }
-
-    public void addRule(Rule rule) {
-        rules.add(rule);
     }
 
     public int getSuit() {
