@@ -3,21 +3,27 @@ package com.example.myrulescardgamebackend.sockets.domain;
 import java.util.ArrayList;
 
 import com.example.myrulescardgamebackend.CardEnums;
+import com.example.myrulescardgamebackend.rest.domain.Card;
 import com.example.myrulescardgamebackend.sockets.games.rules.Rule;
 
-public class Card {
+public class SocketCard {
     private int suit;
     private int value;
     private ArrayList<Rule> rules;
 
-    public Card() {}
+    public SocketCard() {}
 
-    public Card(Card card) {
-        this.suit = card.getSuit();
-        this.value = card.getValue();
+    public SocketCard(SocketCard socketCard) {
+        this.suit = socketCard.getSuit();
+        this.value = socketCard.getValue();
     }
 
-    public Card(int suit, int value) {
+    public SocketCard(Card card) {
+        this.suit = card.getSuitEnum();
+        this.value = card.getValueEnum();
+    }
+
+    public SocketCard(int suit, int value) {
         this.suit = suit;
         this.value = value;
     }
@@ -33,7 +39,7 @@ public class Card {
         return rules;
     }
 
-    public Card(CardEnums.Suit suit, CardEnums.Value value) {
+    public SocketCard(CardEnums.Suit suit, CardEnums.Value value) {
         this.suit = suit.getSuit();
         this.value = value.getValue();
     }

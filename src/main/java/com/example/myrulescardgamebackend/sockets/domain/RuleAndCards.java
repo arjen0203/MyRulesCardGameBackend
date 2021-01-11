@@ -2,22 +2,24 @@ package com.example.myrulescardgamebackend.sockets.domain;
 
 import java.util.ArrayList;
 
+import com.example.myrulescardgamebackend.RuleEnum;
+
 public class RuleAndCards {
-    RuleSetData.RuleEnum ruleId;
-    ArrayList<Card> cards;
+    RuleEnum ruleId;
+    ArrayList<SocketCard> socketCardDomains;
 
     public RuleAndCards() {}
 
-    public RuleAndCards(RuleSetData.RuleEnum ruleId, ArrayList<Card> cards) {
+    public RuleAndCards(RuleEnum ruleId, ArrayList<SocketCard> socketCardDomains) {
         this.ruleId = ruleId;
-        this.cards = cards;
+        this.socketCardDomains = socketCardDomains;
     }
 
-    public RuleSetData.RuleEnum getRuleId() {
+    public RuleEnum getRuleId() {
         return ruleId;
     }
 
-    public ArrayList<Card> getCards() {
-        return cards;
+    public ArrayList<SocketCard> getCards() {
+        return socketCardDomains;
     }
 }

@@ -5,16 +5,16 @@ import java.util.ArrayList;
 public class GameStateData {
     public ArrayList<PlayerData> players;
     public boolean isTurn;
-    public ArrayList<CardData> cards;
-    public Card currentCard;
+    public ArrayList<CardData> cardDomains;
+    public SocketCard currentSocketCard;
 
     public GameStateData() {}
 
-    public GameStateData(ArrayList<PlayerData> playersData, boolean isTurn, ArrayList<CardData> cards,
-            Card currentCard) {
+    public GameStateData(ArrayList<PlayerData> playersData, boolean isTurn, ArrayList<CardData> cardDomains,
+            SocketCard currentSocketCard) {
         this.players = playersData;
         this.isTurn = isTurn;
-        this.cards = cards;
-        this.currentCard = currentCard;
+        this.cardDomains = cardDomains;
+        this.currentSocketCard = currentSocketCard;
     }
 }

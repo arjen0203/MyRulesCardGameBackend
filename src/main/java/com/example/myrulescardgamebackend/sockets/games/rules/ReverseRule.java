@@ -2,17 +2,22 @@ package com.example.myrulescardgamebackend.sockets.games.rules;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.rest.domain.Card;
+import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 import com.example.myrulescardgamebackend.sockets.domain.MessageData;
 import com.example.myrulescardgamebackend.sockets.games.Game;
 import com.example.myrulescardgamebackend.sockets.games.Player;
 
 public class ReverseRule implements Rule{
-    ArrayList<Card> cards;
+    ArrayList<SocketCard> socketCards;
 
-    public ReverseRule(ArrayList<Card> cards) {
-        this.cards = cards;
+    public ReverseRule(List<Card> cards) {
+        ArrayList<SocketCard> socketCards = new ArrayList<>();
+        for (int i = 0; i < cards.size(); i++) {
+            socketCards.add(new SocketCard(cards.get(i)));
+        }
     }
 
     @Override
@@ -38,7 +43,7 @@ public class ReverseRule implements Rule{
     }
 
     @Override
-    public ArrayList<Card> getCards() {
-        return cards;
+    public ArrayList<SocketCard> getCards() {
+        return socketCards;
     }
 }

@@ -6,9 +6,9 @@ public class CardData {
 
     public CardData() {}
 
-    public CardData(Card card) {
-        this.suit = card.getSuit();
-        this.value = card.getValue();
+    public CardData(SocketCard socketCard) {
+        this.suit = socketCard.getSuit();
+        this.value = socketCard.getValue();
     }
 
     public int getValue() {

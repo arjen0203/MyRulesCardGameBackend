@@ -1,19 +1,18 @@
 package com.example.myrulescardgamebackend.sockets.games;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 
 public class GameState {
-    private ArrayList<Card> pickPile;
-    private ArrayList<Card> discardPile = new ArrayList<Card>();
-    private Card topCard;
+    private ArrayList<SocketCard> pickPile;
+    private ArrayList<SocketCard> discardPile = new ArrayList<SocketCard>();
+    private SocketCard topSocketCard;
     private ArrayList<Player> players;
     private ArrayList<Player> turnOrder;
     private Player currentPlayer;
 
-    public ArrayList<Card> getPickPile() {
+    public ArrayList<SocketCard> getPickPile() {
         return pickPile;
     }
 
@@ -25,19 +24,19 @@ public class GameState {
         return currentPlayer;
     }
 
-    public ArrayList<Card> getDiscardPile() {
+    public ArrayList<SocketCard> getDiscardPile() {
         return discardPile;
     }
 
-    public Card getTopCard() {
-        return topCard;
+    public SocketCard getTopCard() {
+        return topSocketCard;
     }
 
-    public void setTopCard(Card card) {
-        this.topCard = card;
+    public void setTopCard(SocketCard socketCard) {
+        this.topSocketCard = socketCard;
     }
 
-    public void setPickPile(ArrayList<Card> pickPile) {
+    public void setPickPile(ArrayList<SocketCard> pickPile) {
         this.pickPile = pickPile;
     }
 
@@ -51,13 +50,13 @@ public class GameState {
 
 
 
-    public void playedCard(Card card) {
-        this.discardPile.add(this.topCard);
-        this.topCard = card;
+    public void playedCard(SocketCard socketCard) {
+        this.discardPile.add(this.topSocketCard);
+        this.topSocketCard = socketCard;
     }
 
-    public void discardCard(Card card) {
-        this.discardPile.add(card);
+    public void discardCard(SocketCard socketCard) {
+        this.discardPile.add(socketCard);
     }
 
     public void setTurnOrder(ArrayList<Player> turnOrder) {
@@ -68,7 +67,7 @@ public class GameState {
         this.players = players;
     }
 
-    public void removePlayersCard(Card card, Player player) {
-        player.getCards().remove(card);
+    public void removePlayersCard(SocketCard socketCard, Player player) {
+        player.getCards().remove(socketCard);
     }
 }

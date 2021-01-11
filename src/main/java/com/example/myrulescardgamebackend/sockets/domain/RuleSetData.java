@@ -17,11 +17,5 @@ public class RuleSetData {
         return cardRules;
     }
 
-    public enum RuleEnum {
-        SKIP,
-        PICK1,
-        PICK2,
-        PICK4,
-        REVERSE
-    }
+
 }

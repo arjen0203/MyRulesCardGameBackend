@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.example.myrulescardgamebackend.CardEnums;
-import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 import com.example.myrulescardgamebackend.sockets.domain.CardData;
 import com.example.myrulescardgamebackend.sockets.games.rules.Rule;
 
@@ -20,7 +20,7 @@ public class Game {
         return gameState;
     }
 
-    public void setPickPile(ArrayList<Card> pickPile) {
+    public void setPickPile(ArrayList<SocketCard> pickPile) {
         this.gameState.setPickPile(pickPile);
     }
 
@@ -29,13 +29,13 @@ public class Game {
     }
 
     public void initGame() {
-        //gives each player cards
+        //gives each player cardDomains
         for (Player player: gameState.getPlayers()) {
-            ArrayList<Card> cards = new ArrayList<>();
+            ArrayList<SocketCard> socketCardDomains = new ArrayList<>();
             for (int i = 0; i < CARDSPERPLAYER; i++) {
-                cards.add(pickCard());
+                socketCardDomains.add(pickCard());
             }
-            player.setCards(cards);
+            player.setCards(socketCardDomains);
         }
 
         //sets turn order and current player
@@ -55,41 +55,41 @@ public class Game {
         return winners;
     }
 
-    public Card getPlayersCard(CardData cardData, Player player) {
-        for (Card card: player.getCards()) {
-            if (card.getValue() == cardData.getValue() && card.getSuit() == cardData.getSuit()) {
-                return card;
+    public SocketCard getPlayersCard(CardData cardData, Player player) {
+        for (SocketCard socketCard : player.getCards()) {
+            if (socketCard.getValue() == cardData.getValue() && socketCard.getSuit() == cardData.getSuit()) {
+                return socketCard;
             }
         }
         return null;
     }
 
-    public boolean isCardPlayable(Card card) {
+    public boolean isCardPlayable(SocketCard socketCard) {
         //currently only standard rules which means and will be declared on the home page:
         //joker can always be played and anything can be put on top
         //card played has to be of the same suit or value
         //possibly implement later picking the rules for a playable card
-        if (card.getSuit() == CardEnums.Suit.JOKER.getSuit()) {
+        if (socketCard.getSuit() == CardEnums.Suit.JOKER.getSuit()) {
             return true;
         }
         if (gameState.getTopCard().getSuit() == CardEnums.Suit.JOKER.getSuit()) {
             return true;
         }
-        if (card.getSuit() == gameState.getTopCard().getSuit()) {
+        if (socketCard.getSuit() == gameState.getTopCard().getSuit()) {
             return true;
         }
-        if (card.getValue() == gameState.getTopCard().getValue()) {
+        if (socketCard.getValue() == gameState.getTopCard().getValue()) {
             return true;
         }
         return false;
     }
 
-    public Card pickCard() {
-        ArrayList<Card> pickPile = gameState.getPickPile();
-        ArrayList<Card> discardPile = gameState.getDiscardPile();
+    public SocketCard pickCard() {
+        ArrayList<SocketCard> pickPile = gameState.getPickPile();
+        ArrayList<SocketCard> discardPile = gameState.getDiscardPile();
 
         if (pickPile.size() < 1) {
-            pickPile = (ArrayList<Card>) discardPile.clone();
+            pickPile = (ArrayList<SocketCard>) discardPile.clone();
             discardPile.clear();
             Collections.shuffle(pickPile);
         }
@@ -98,20 +98,20 @@ public class Game {
             return null;
         }
 
-        Card card = pickPile.get(pickPile.size() - 1);
+        SocketCard socketCard = pickPile.get(pickPile.size() - 1);
         pickPile.remove(pickPile.size() - 1);
-        return card;
+        return socketCard;
     }
 
-    public void playCard(Card card, Player player) {
-        player.getCards().remove(card);
-        if (card.getRules() != null) {
-            for (Rule rule: card.getRules()) {
+    public void playCard(SocketCard socketCard, Player player) {
+        player.getCards().remove(socketCard);
+        if (socketCard.getRules() != null) {
+            for (Rule rule: socketCard.getRules()) {
                 rule.doRule(this);
             }
         }
         gameState.getDiscardPile().add(gameState.getTopCard());
-        gameState.setTopCard(card);
+        gameState.setTopCard(socketCard);
     }
 
     public void nextPlayer() {

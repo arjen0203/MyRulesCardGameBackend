@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import com.corundumstudio.socketio.SocketIOClient;
 import com.example.myrulescardgamebackend.sockets.Lobby;
-import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 
 public class Player {
     String name;
-    ArrayList<Card> cards;
+    ArrayList<SocketCard> socketCardDomains;
     SocketIOClient socket;
     Game game;
     Lobby lobby;
@@ -21,12 +21,12 @@ public class Player {
         this.lobby = lobby;
     }
 
-    public ArrayList<Card> getCards() {
-        return cards;
+    public ArrayList<SocketCard> getCards() {
+        return socketCardDomains;
     }
 
-    public void setCards(ArrayList<Card> cards) {
-        this.cards = cards;
+    public void setCards(ArrayList<SocketCard> socketCardDomains) {
+        this.socketCardDomains = socketCardDomains;
     }
 
     public Lobby getLobby() {

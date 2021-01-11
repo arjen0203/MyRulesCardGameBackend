@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.example.myrulescardgamebackend.CardEnums;
-import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.rest.domain.RuleSet;
+import com.example.myrulescardgamebackend.rest.repositories.RuleSetRepository;
+import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 import com.example.myrulescardgamebackend.sockets.domain.CardData;
 import com.example.myrulescardgamebackend.sockets.domain.GameStateData;
 import com.example.myrulescardgamebackend.sockets.domain.HostGame;
@@ -13,12 +14,10 @@ import com.example.myrulescardgamebackend.sockets.domain.MessageData;
 import com.example.myrulescardgamebackend.sockets.domain.JoinLobby;
 import com.example.myrulescardgamebackend.sockets.domain.LobbyData;
 import com.example.myrulescardgamebackend.sockets.domain.PlayerData;
-import com.example.myrulescardgamebackend.sockets.domain.RuleAndCards;
-import com.example.myrulescardgamebackend.sockets.domain.RuleSetData;
 import com.example.myrulescardgamebackend.sockets.games.Game;
 import com.example.myrulescardgamebackend.sockets.games.GameManager;
 import com.example.myrulescardgamebackend.sockets.games.Player;
-import com.example.myrulescardgamebackend.sockets.games.rules.RuleSet;
+import com.example.myrulescardgamebackend.sockets.games.rules.RuleSetSockets;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,11 +26,13 @@ public class SocketManager {
     Configuration config;
     LobbyManager lobbyManager;
     GameManager gameManager;
+    private final RuleSetRepository ruleSetRepository;
 
-    public SocketManager() {
+    public SocketManager(RuleSetRepository ruleSetRepository) {
         config = new Configuration();
         gameManager = new GameManager();
         lobbyManager = new LobbyManager();
+        this.ruleSetRepository = ruleSetRepository;
         this.init();
     }
 
@@ -72,9 +73,11 @@ public class SocketManager {
             if (data.hostName.length() < 3) return;
             //todo add global error socket
 
-            //todo add getting the ruleSetData
-            RuleSet ruleSet = gameManager.createRuleSet(getDefaultRuleSet());
-            Game game = gameManager.createGame(ruleSet);
+            var ruleSet = ruleSetRepository.findById(data.gameId);
+            if (ruleSet.isEmpty()) return;
+
+            RuleSetSockets ruleSetSockets = gameManager.createRuleSet(ruleSet.get());
+            Game game = gameManager.createGame(ruleSetSockets);
 
             lobbyManager.CreateLobby(socket, data.hostName, game);
 
@@ -161,13 +164,13 @@ public class SocketManager {
                         (game.getGameState().getCurrentPlayer() == player)));
             }
             boolean isTurn = (currentPlayer == game.getGameState().getCurrentPlayer());
-            ArrayList<CardData> cards = new ArrayList<>();
-            for (Card card: currentPlayer.getCards()) {
-                cards.add(new CardData(card));
+            ArrayList<CardData> cardDomains = new ArrayList<>();
+            for (SocketCard socketCard : currentPlayer.getCards()) {
+                cardDomains.add(new CardData(socketCard));
             }
-            Card currentCard = game.getGameState().getTopCard();
+            SocketCard currentSocketCard = game.getGameState().getTopCard();
 
-            GameStateData gameStateData = new GameStateData(playersData, isTurn, cards, currentCard);
+            GameStateData gameStateData = new GameStateData(playersData, isTurn, cardDomains, currentSocketCard);
 
             socket.sendEvent("gameState", gameStateData);
         });
@@ -178,13 +181,13 @@ public class SocketManager {
             Game game = player.getGame();
             if (game == null) return; //checks if there is a game linked to the player
             if (player != game.getGameState().getCurrentPlayer()) return; //checks if it is the players turn
-            Card card = game.getPlayersCard(data, player);
-            if (card == null) return; //check if the card exists within the players hand
-            if (!game.isCardPlayable(card)) { //checks if the card can be played
+            SocketCard socketCard = game.getPlayersCard(data, player);
+            if (socketCard == null) return; //check if the card exists within the players hand
+            if (!game.isCardPlayable(socketCard)) { //checks if the card can be played
                 player.getSocket().sendEvent("message", new MessageData("[SERVER]: This card cannot be played", true));
                 return;
             }
-            game.playCard(card, player);
+            game.playCard(socketCard, player);
             ArrayList<Player> winners = game.getWinners();
             if (winners.size() > 0) {
                 String winnerNames = "";
@@ -218,12 +221,12 @@ public class SocketManager {
             Game game = player.getGame();
             if (game == null) return; //checks if there is a game linked to the player
             if (player != game.getGameState().getCurrentPlayer()) return; //checks if it is the players turn
-            for (Card card: player.getCards()) {
-                if (game.isCardPlayable(card)) return; //checks if the player really has no cards to play
+            for (SocketCard socketCard : player.getCards()) {
+                if (game.isCardPlayable(socketCard)) return; //checks if the player really has no cardDomains to play
             }
-            Card card = game.pickCard();
-            player.getCards().add(card);
-            if (game.isCardPlayable(card)) {
+            SocketCard socketCard = game.pickCard();
+            player.getCards().add(socketCard);
+            if (game.isCardPlayable(socketCard)) {
                 sendGameState(game);
             } else {
                 MessageData message = new MessageData("[SERVER]: " + player.getName() + " could not play a card and the turn was skipped", true);
@@ -271,52 +274,23 @@ public class SocketManager {
                     (game.getGameState().getCurrentPlayer() == player)));
         }
 
-        Card currentCard = game.getGameState().getTopCard();
+        SocketCard currentSocketCard = game.getGameState().getTopCard();
 
         for (Player player: game.getGameState().getPlayers()) {
             boolean isTurn = (player == game.getGameState().getCurrentPlayer());
 
-            ArrayList<CardData> cards = new ArrayList<>();
-            for (Card card: player.getCards()) {
-                cards.add(new CardData(card));
+            ArrayList<CardData> cardDomains = new ArrayList<>();
+            for (SocketCard socketCard : player.getCards()) {
+                cardDomains.add(new CardData(socketCard));
             }
 
-            GameStateData gameStateData = new GameStateData(playersData, isTurn, cards, currentCard);
+            GameStateData gameStateData = new GameStateData(playersData, isTurn, cardDomains, currentSocketCard);
             player.getSocket().sendEvent("gameState", gameStateData);
         }
     }
 
-    private RuleSetData getDefaultRuleSet(){
-        ArrayList<RuleAndCards> ruleAndCards = new ArrayList<>();
-
-        ArrayList<Card> skipCards = new ArrayList<>();
-        skipCards.add(new Card(CardEnums.Suit.CLUBS, CardEnums.Value.ACE));
-        skipCards.add(new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.ACE));
-        skipCards.add(new Card(CardEnums.Suit.SPADES, CardEnums.Value.ACE));
-        skipCards.add(new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.ACE));
-        ruleAndCards.add(new RuleAndCards(RuleSetData.RuleEnum.SKIP, skipCards));
-
-        ArrayList<Card> pick1Cards = new ArrayList<>();
-        pick1Cards.add(new Card(CardEnums.Suit.CLUBS, CardEnums.Value.TWO));
-        pick1Cards.add(new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.TWO));
-        pick1Cards.add(new Card(CardEnums.Suit.SPADES, CardEnums.Value.TWO));
-        pick1Cards.add(new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.TWO));
-        ruleAndCards.add(new RuleAndCards(RuleSetData.RuleEnum.PICK1, pick1Cards));
-
-        ArrayList<Card> pick4Cards = new ArrayList<>();
-        pick4Cards.add(new Card(CardEnums.Suit.CLUBS, CardEnums.Value.FOUR));
-        pick4Cards.add(new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.FOUR));
-        pick4Cards.add(new Card(CardEnums.Suit.SPADES, CardEnums.Value.FOUR));
-        pick4Cards.add(new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.FOUR));
-        ruleAndCards.add(new RuleAndCards(RuleSetData.RuleEnum.PICK4, pick4Cards));
-
-        ArrayList<Card> reverseCards = new ArrayList<>();
-        reverseCards.add(new Card(CardEnums.Suit.CLUBS, CardEnums.Value.KING));
-        reverseCards.add(new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.KING));
-        reverseCards.add(new Card(CardEnums.Suit.SPADES, CardEnums.Value.KING));
-        reverseCards.add(new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.KING));
-        ruleAndCards.add(new RuleAndCards(RuleSetData.RuleEnum.REVERSE, reverseCards));
-
-        return new RuleSetData(ruleAndCards);
+    private RuleSet getDefaultRuleSet(){
+        //todo reimplement working default
+        return null;
     }
 }

@@ -2,10 +2,10 @@ package com.example.myrulescardgamebackend.sockets.games.rules;
 
 import java.util.ArrayList;
 
-public class RuleSet {
+public class RuleSetSockets {
     ArrayList<Rule> rules;
 
-    public RuleSet(ArrayList<Rule> rules) {
+    public RuleSetSockets(ArrayList<Rule> rules) {
         this.rules = rules;
     }
 

@@ -1,18 +1,23 @@
 package com.example.myrulescardgamebackend.sockets.games.rules;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import com.example.myrulescardgamebackend.sockets.domain.Card;
+import com.example.myrulescardgamebackend.rest.domain.Card;
+import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 import com.example.myrulescardgamebackend.sockets.domain.MessageData;
 import com.example.myrulescardgamebackend.sockets.games.Game;
 import com.example.myrulescardgamebackend.sockets.games.Player;
 
 public class PickRule implements Rule{
-    ArrayList<Card> cards;
+    ArrayList<SocketCard> socketCards;
     int pickAmount;
 
-    public PickRule(ArrayList<Card> cards, int pickAmount) {
-        this.cards = cards;
+    public PickRule(List<Card> cards, int pickAmount) {
+        ArrayList<SocketCard> socketCards = new ArrayList<>();
+        for (int i = 0; i < cards.size(); i++) {
+            socketCards.add(new SocketCard(cards.get(i)));
+        }
         this.pickAmount = pickAmount;
     }
 
@@ -34,7 +39,7 @@ public class PickRule implements Rule{
     }
 
     @Override
-    public ArrayList<Card> getCards() {
-        return cards;
+    public ArrayList<SocketCard> getCards() {
+        return socketCards;
     }
 }

@@ -1,84 +1,86 @@
 package com.example.myrulescardgamebackend.sockets.games;
 
+import static com.example.myrulescardgamebackend.RuleEnum.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 import com.example.myrulescardgamebackend.CardEnums;
-import com.example.myrulescardgamebackend.sockets.domain.Card;
-import com.example.myrulescardgamebackend.sockets.domain.RuleAndCards;
-import com.example.myrulescardgamebackend.sockets.domain.RuleSetData;
+import com.example.myrulescardgamebackend.rest.domain.CardRule;
+import com.example.myrulescardgamebackend.rest.domain.RuleSet;
+import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 import com.example.myrulescardgamebackend.sockets.games.rules.PickRule;
 import com.example.myrulescardgamebackend.sockets.games.rules.ReverseRule;
 import com.example.myrulescardgamebackend.sockets.games.rules.Rule;
-import com.example.myrulescardgamebackend.sockets.games.rules.RuleSet;
+import com.example.myrulescardgamebackend.sockets.games.rules.RuleSetSockets;
 import com.example.myrulescardgamebackend.sockets.games.rules.SkipRule;
 
 public class GameManager {
-    Card[][] cardsLookupTable;
+    SocketCard[][] cardsLookupTable;
 
     public GameManager() {
-        cardsLookupTable = new Card[][] {
-                {new Card(CardEnums.Suit.CLUBS, CardEnums.Value.ACE),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.TWO),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.THREE),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.FOUR),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.FIVE),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.SIX),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.SEVEN),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.EIGHT),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.NINE),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.TEN),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.JACK),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.QUEEN),
-                    new Card(CardEnums.Suit.CLUBS, CardEnums.Value.KING)},
-                {new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.ACE),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.TWO),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.THREE),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.FOUR),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.FIVE),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.SIX),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.SEVEN),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.EIGHT),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.NINE),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.TEN),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.JACK),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.QUEEN),
-                    new Card(CardEnums.Suit.HEARTHS, CardEnums.Value.KING)},
-                {new Card(CardEnums.Suit.SPADES, CardEnums.Value.ACE),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.TWO),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.THREE),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.FOUR),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.FIVE),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.SIX),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.SEVEN),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.EIGHT),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.NINE),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.TEN),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.JACK),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.QUEEN),
-                    new Card(CardEnums.Suit.SPADES, CardEnums.Value.KING)},
-                {new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.ACE),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.TWO),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.THREE),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.FOUR),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.FIVE),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.SIX),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.SEVEN),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.EIGHT),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.NINE),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.TEN),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.JACK),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.QUEEN),
-                    new Card(CardEnums.Suit.DIAMONDS, CardEnums.Value.KING)},
-                {new Card(CardEnums.Suit.JOKER, CardEnums.Value.JOKER1),
-                    new Card(CardEnums.Suit.JOKER, CardEnums.Value.JOKER2)}
+        cardsLookupTable = new SocketCard[][] {
+                {new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.ACE),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.TWO),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.THREE),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.FOUR),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.FIVE),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.SIX),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.SEVEN),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.EIGHT),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.NINE),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.TEN),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.JACK),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.QUEEN),
+                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.KING)},
+                {new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.ACE),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.TWO),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.THREE),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.FOUR),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.FIVE),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.SIX),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.SEVEN),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.EIGHT),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.NINE),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.TEN),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.JACK),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.QUEEN),
+                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.KING)},
+                {new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.ACE),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.TWO),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.THREE),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.FOUR),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.FIVE),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.SIX),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.SEVEN),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.EIGHT),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.NINE),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.TEN),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.JACK),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.QUEEN),
+                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.KING)},
+                {new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.ACE),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.TWO),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.THREE),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.FOUR),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.FIVE),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.SIX),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.SEVEN),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.EIGHT),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.NINE),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.TEN),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.JACK),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.QUEEN),
+                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.KING)},
+                {new SocketCard(CardEnums.Suit.JOKER, CardEnums.Value.JOKER1),
+                    new SocketCard(CardEnums.Suit.JOKER, CardEnums.Value.JOKER2)}
         };
     }
 
-    public Game createGame(RuleSet ruleSet) {
+    public Game createGame(RuleSetSockets ruleSetSockets) {
         Game game = new Game();
-        game.setPickPile(createGameDeckWithRules(ruleSet.getRules()));
+        game.setPickPile(createGameDeckWithRules(ruleSetSockets.getRules()));
 
         return game;
     }
@@ -91,23 +93,23 @@ public class GameManager {
         }
     }
 
-    public ArrayList<Card> createGameDeckWithRules(ArrayList<Rule> rules) {
-        Card[][] cardWithRules = new Card[cardsLookupTable.length][];
+    public ArrayList<SocketCard> createGameDeckWithRules(ArrayList<Rule> rules) {
+        SocketCard[][] socketCardWithRules = new SocketCard[cardsLookupTable.length][];
         for (int i = 0; i < cardsLookupTable.length; i++) {
-            cardWithRules[i] = new Card[cardsLookupTable[i].length];
+            socketCardWithRules[i] = new SocketCard[cardsLookupTable[i].length];
             for (int j = 0; j < cardsLookupTable[i].length; j++) {
-                cardWithRules[i][j] = new Card(cardsLookupTable[i][j]);
+                socketCardWithRules[i][j] = new SocketCard(cardsLookupTable[i][j]);
             }
         }
 
         for (Rule rule: rules) {
-            for (Card card: rule.getCards()) {
-                cardWithRules[card.getSuit()][card.getValue()].addRule(rule);
+            for (SocketCard socketCard : rule.getCards()) {
+                socketCardWithRules[socketCard.getSuit()][socketCard.getValue()].addRule(rule);
             }
         }
 
-        ArrayList<Card> deckWithRules = new ArrayList<Card>();
-        for (Card[] array : cardWithRules) {
+        ArrayList<SocketCard> deckWithRules = new ArrayList<SocketCard>();
+        for (SocketCard[] array : socketCardWithRules) {
             deckWithRules.addAll(Arrays.asList(array));
             deckWithRules.addAll(Arrays.asList(array));
         }
@@ -117,11 +119,13 @@ public class GameManager {
         return deckWithRules;
     }
 
-    public RuleSet createRuleSet(RuleSetData data) {
+    public RuleSetSockets createRuleSet(RuleSet data) {
         //todo ad actual rules creating function
         ArrayList<Rule> rules = new ArrayList<>();
-        for (RuleAndCards cardRule : data.getCardRules()) {
-            switch (cardRule.getRuleId()) {
+
+
+        for (CardRule cardRule : data.getCardRules()) {
+            switch (values()[cardRule.getRuleEnum()]) {
             case SKIP:
                 rules.add(new SkipRule(cardRule.getCards()));
                 break;
@@ -142,8 +146,8 @@ public class GameManager {
             }
         }
 
-        RuleSet ruleSet = new RuleSet(rules);
+        RuleSetSockets ruleSetSockets = new RuleSetSockets(rules);
 
-        return ruleSet;
+        return ruleSetSockets;
     }
 }

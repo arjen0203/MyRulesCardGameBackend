@@ -59,6 +59,6 @@ public class UserController {
             return ResponseEntity.ok("Successfully registered user");
         }
 
-        return ResponseEntity.status(422).body(result.getMessage());
+        return ResponseEntity.status(409).body(result.getMessage());
     }
 }
