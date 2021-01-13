@@ -254,7 +254,9 @@ public class SocketManager {
     }
 
     private void sendLobbyDataByLobby(Lobby lobby) {
+        if (lobby == null) return;
         ArrayList<PlayerData> playersData = new ArrayList<>();
+        if (playersData == null) return;
         for (Player player: lobby.getPlayers()) {
             playersData.add(new PlayerData(player.getName(), player.getSocket().getSessionId()));
         }
