@@ -1,11 +1,11 @@
 package com.example.myrulescardgamebackend;
 
 public enum RuleEnum {
-    SKIP(0),
+    REVERSE(0),
     PICK1(1),
     PICK2(2),
     PICK4(3),
-    REVERSE(4);
+    SKIP(4),;
 
     private final int rule;
 
