@@ -14,7 +14,7 @@ public class PickRule implements Rule{
     int pickAmount;
 
     public PickRule(List<Card> cards, int pickAmount) {
-        ArrayList<SocketCard> socketCards = new ArrayList<>();
+        socketCards = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
             socketCards.add(new SocketCard(cards.get(i)));
         }

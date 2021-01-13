@@ -12,6 +12,7 @@ import com.example.myrulescardgamebackend.rest.domain.RuleSetSimple;
 import com.example.myrulescardgamebackend.rest.domain.User;
 import com.example.myrulescardgamebackend.rest.repositories.RuleSetRepository;
 import com.example.myrulescardgamebackend.rest.repositories.UserRepository;
+import com.example.myrulescardgamebackend.rest.services.RuleSetService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONException;
@@ -32,10 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RuleSetController {
     private final RuleSetRepository ruleSetRepository;
     private final UserRepository userRepository;
+    private final RuleSetService ruleSetService;
 
-    public RuleSetController(RuleSetRepository ruleSetRepository, UserRepository userRepository) {
+    public RuleSetController(RuleSetRepository ruleSetRepository, UserRepository userRepository, RuleSetService ruleSetService) {
         this.ruleSetRepository = ruleSetRepository;
         this.userRepository = userRepository;
+        this.ruleSetService = ruleSetService;
     }
 
     @CrossOrigin
@@ -61,7 +64,7 @@ public class RuleSetController {
     @CrossOrigin
     @GetMapping("/get")
     public ResponseEntity<?> getRuleSet(@RequestParam int id) {
-        var ruleSet = ruleSetRepository.findById(id);
+        var ruleSet = ruleSetService.getRuleSetById(id);
         if (ruleSet.isPresent()) {
             return ResponseEntity.ok(ruleSet.get());
         }

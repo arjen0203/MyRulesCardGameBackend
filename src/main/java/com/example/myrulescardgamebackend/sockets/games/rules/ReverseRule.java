@@ -14,7 +14,7 @@ public class ReverseRule implements Rule{
     ArrayList<SocketCard> socketCards;
 
     public ReverseRule(List<Card> cards) {
-        ArrayList<SocketCard> socketCards = new ArrayList<>();
+        socketCards = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
             socketCards.add(new SocketCard(cards.get(i)));
         }

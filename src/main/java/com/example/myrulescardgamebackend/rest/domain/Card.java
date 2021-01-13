@@ -1,9 +1,11 @@
 package com.example.myrulescardgamebackend.rest.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Card {
@@ -28,5 +30,13 @@ public class Card {
 
     public int getValueEnum() {
         return valueEnum;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

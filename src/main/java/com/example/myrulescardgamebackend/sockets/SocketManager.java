@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.example.myrulescardgamebackend.rest.domain.RuleSet;
-import com.example.myrulescardgamebackend.rest.repositories.RuleSetRepository;
+import com.example.myrulescardgamebackend.rest.services.RuleSetService;
 import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 import com.example.myrulescardgamebackend.sockets.domain.CardData;
 import com.example.myrulescardgamebackend.sockets.domain.GameStateData;
@@ -22,17 +22,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SocketManager {
-    SocketIOServer server;
-    Configuration config;
-    LobbyManager lobbyManager;
-    GameManager gameManager;
-    private final RuleSetRepository ruleSetRepository;
+    private SocketIOServer server;
+    private final Configuration config;
+    private final LobbyManager lobbyManager;
+    private final GameManager gameManager;
+    private final RuleSetService ruleSetService;
 
-    public SocketManager(RuleSetRepository ruleSetRepository) {
+    public SocketManager(RuleSetService ruleSetService) {
         config = new Configuration();
         gameManager = new GameManager();
         lobbyManager = new LobbyManager();
-        this.ruleSetRepository = ruleSetRepository;
+        this.ruleSetService = ruleSetService;
         this.init();
     }
 
@@ -73,7 +73,7 @@ public class SocketManager {
             if (data.hostName.length() < 3) return;
             //todo add global error socket
 
-            var ruleSet = ruleSetRepository.findById(data.gameId);
+            var ruleSet = ruleSetService.getRuleSetById(data.gameId);
             if (ruleSet.isEmpty()) return;
 
             RuleSetSockets ruleSetSockets = gameManager.createRuleSet(ruleSet.get());
@@ -81,8 +81,8 @@ public class SocketManager {
 
             lobbyManager.CreateLobby(socket, data.hostName, game);
 
-            socket.sendEvent("hostSucces");
-            System.out.println("lobby created succes");
+            socket.sendEvent("hostSuccess");
+            System.out.println("lobby created success");
         });
 
         server.addEventListener("joinLobby", JoinLobby.class, (socket, data, ackRequest) -> {
@@ -113,7 +113,7 @@ public class SocketManager {
 
             if (lobby == null) return;
 
-            ArrayList<PlayerData> playersData = new ArrayList<PlayerData>();
+            ArrayList<PlayerData> playersData = new ArrayList<>();
             for (Player player: lobby.getPlayers()) {
                 playersData.add(new PlayerData(player.getName(), player.getSocket().getSessionId()));
             }
@@ -164,13 +164,13 @@ public class SocketManager {
                         (game.getGameState().getCurrentPlayer() == player)));
             }
             boolean isTurn = (currentPlayer == game.getGameState().getCurrentPlayer());
-            ArrayList<CardData> cardDomains = new ArrayList<>();
+            ArrayList<CardData> cards = new ArrayList<>();
             for (SocketCard socketCard : currentPlayer.getCards()) {
-                cardDomains.add(new CardData(socketCard));
+                cards.add(new CardData(socketCard));
             }
-            SocketCard currentSocketCard = game.getGameState().getTopCard();
+            SocketCard currentCard = game.getGameState().getTopCard();
 
-            GameStateData gameStateData = new GameStateData(playersData, isTurn, cardDomains, currentSocketCard);
+            GameStateData gameStateData = new GameStateData(playersData, isTurn, cards, currentCard);
 
             socket.sendEvent("gameState", gameStateData);
         });
@@ -254,7 +254,7 @@ public class SocketManager {
     }
 
     private void sendLobbyDataByLobby(Lobby lobby) {
-        ArrayList<PlayerData> playersData = new ArrayList<PlayerData>();
+        ArrayList<PlayerData> playersData = new ArrayList<>();
         for (Player player: lobby.getPlayers()) {
             playersData.add(new PlayerData(player.getName(), player.getSocket().getSessionId()));
         }

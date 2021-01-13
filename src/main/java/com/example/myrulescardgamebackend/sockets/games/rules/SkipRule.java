@@ -13,7 +13,7 @@ public class SkipRule implements Rule {
     ArrayList<SocketCard> socketCards;
 
     public SkipRule(List<Card> cards) {
-        ArrayList<SocketCard> socketCards = new ArrayList<>();
+        socketCards = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
             socketCards.add(new SocketCard(cards.get(i)));
         }

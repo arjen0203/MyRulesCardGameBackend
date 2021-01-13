@@ -29,7 +29,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(SIGN_UP_URL).permitAll()
+                .antMatchers(SIGN_UP_URL, "/rulesets/get**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new com.example.myrulescardgamebackend.rest.security.JWTAuthenticationFilter(authenticationManager()))
