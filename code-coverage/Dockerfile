@@ -14,6 +14,6 @@ EXPOSE 5000
 # Host test results
 #
 
-RUN npm i --silent
+RUN npm i
 
 CMD ["npm", "start"]
