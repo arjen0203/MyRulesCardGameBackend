@@ -4,7 +4,8 @@ public class CardData {
     public int suit;
     public int value;
 
-    public CardData() {}
+    public CardData() {
+    }
 
     public CardData(SocketCard socketCard) {
         this.suit = socketCard.getSuit();

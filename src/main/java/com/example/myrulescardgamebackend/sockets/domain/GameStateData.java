@@ -8,7 +8,8 @@ public class GameStateData {
     public ArrayList<CardData> cards;
     public SocketCard currentCard;
 
-    public GameStateData() {}
+    public GameStateData() {
+    }
 
     public GameStateData(ArrayList<PlayerData> playersData, boolean isTurn, ArrayList<CardData> cardDomains,
             SocketCard currentSocketCard) {

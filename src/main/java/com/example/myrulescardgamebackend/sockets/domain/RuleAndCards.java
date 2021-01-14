@@ -8,7 +8,8 @@ public class RuleAndCards {
     RuleEnum ruleId;
     ArrayList<SocketCard> socketCardDomains;
 
-    public RuleAndCards() {}
+    public RuleAndCards() {
+    }
 
     public RuleAndCards(RuleEnum ruleId, ArrayList<SocketCard> socketCardDomains) {
         this.ruleId = ruleId;

@@ -13,7 +13,8 @@ public class Player {
     Game game;
     Lobby lobby;
 
-    public Player() {}
+    public Player() {
+    }
 
     public Player(String name, SocketIOClient socket, Lobby lobby) {
         this.name = name;

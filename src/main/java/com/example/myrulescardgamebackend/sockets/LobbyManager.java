@@ -1,6 +1,5 @@
 package com.example.myrulescardgamebackend.sockets;
 
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
@@ -24,10 +23,11 @@ public class LobbyManager {
 
     public boolean lobbyExists(String code) {
         Lobby lobby = lobbys.get(code);
-        if (lobby == null) return false;
+        if (lobby == null) {
+            return false;
+        }
         return true;
     }
-
 
     public void joinLobby(SocketIOClient socket, String code, String playerName) {
         Lobby lobby = lobbys.get(code);
@@ -38,7 +38,9 @@ public class LobbyManager {
 
     public Lobby getLobbyBySocket(SocketIOClient socket) {
         Player player = players.get(socket.getSessionId());
-        if (player == null) return null;
+        if (player == null) {
+            return null;
+        }
         return players.get(socket.getSessionId()).getLobby();
     }
 
@@ -58,9 +60,11 @@ public class LobbyManager {
         return lobbys.get(code);
     }
 
-    public boolean nameExistsInLobby(String name, Lobby lobby){
-        for (Player player: lobby.getPlayers()) {
-            if (player.getName().equals(name)) return true;
+    public boolean nameExistsInLobby(String name, Lobby lobby) {
+        for (Player player : lobby.getPlayers()) {
+            if (player.getName().equals(name)) {
+                return true;
+            }
         }
         return false;
     }
@@ -71,15 +75,15 @@ public class LobbyManager {
         int targetStringLength = 5;
         Random random = new Random();
 
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+        String generatedString = random.ints(leftLimit, rightLimit + 1).filter(
+                i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength).collect(StringBuilder::new,
+                StringBuilder::appendCodePoint, StringBuilder::append).toString();
 
         generatedString = generatedString.toUpperCase();
 
-        if (lobbys.containsKey(generatedString)) return generateCode();
+        if (lobbys.containsKey(generatedString)) {
+            return generateCode();
+        }
 
         return generatedString;
     }

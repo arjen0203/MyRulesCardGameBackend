@@ -9,12 +9,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class MyRulesCardGameBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MyRulesCardGameBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MyRulesCardGameBackendApplication.class, args);
+    }
 
-	@Bean
-	public BCryptPasswordEncoder bCRyptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public BCryptPasswordEncoder bCRyptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

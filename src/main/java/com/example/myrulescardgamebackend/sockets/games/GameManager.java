@@ -1,6 +1,6 @@
 package com.example.myrulescardgamebackend.sockets.games;
 
-import static com.example.myrulescardgamebackend.RuleEnum.*;
+import static com.example.myrulescardgamebackend.RuleEnum.values;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,62 +20,60 @@ public class GameManager {
     SocketCard[][] cardsLookupTable;
 
     public GameManager() {
-        cardsLookupTable = new SocketCard[][] {
-                {new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.ACE),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.TWO),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.THREE),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.FOUR),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.FIVE),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.SIX),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.SEVEN),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.EIGHT),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.NINE),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.TEN),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.JACK),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.QUEEN),
-                    new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.KING)},
-                {new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.ACE),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.TWO),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.THREE),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.FOUR),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.FIVE),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.SIX),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.SEVEN),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.EIGHT),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.NINE),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.TEN),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.JACK),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.QUEEN),
-                    new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.KING)},
-                {new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.ACE),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.TWO),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.THREE),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.FOUR),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.FIVE),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.SIX),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.SEVEN),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.EIGHT),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.NINE),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.TEN),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.JACK),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.QUEEN),
-                    new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.KING)},
-                {new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.ACE),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.TWO),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.THREE),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.FOUR),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.FIVE),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.SIX),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.SEVEN),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.EIGHT),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.NINE),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.TEN),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.JACK),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.QUEEN),
-                    new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.KING)},
-                {new SocketCard(CardEnums.Suit.JOKER, CardEnums.Value.JOKER1),
-                    new SocketCard(CardEnums.Suit.JOKER, CardEnums.Value.JOKER2)}
-        };
+        cardsLookupTable = new SocketCard[][] { { new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.ACE),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.TWO),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.THREE),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.FOUR),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.FIVE),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.SIX),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.SEVEN),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.EIGHT),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.NINE),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.TEN),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.JACK),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.QUEEN),
+                new SocketCard(CardEnums.Suit.CLUBS, CardEnums.Value.KING) },
+                { new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.ACE),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.TWO),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.THREE),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.FOUR),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.FIVE),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.SIX),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.SEVEN),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.EIGHT),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.NINE),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.TEN),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.JACK),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.QUEEN),
+                        new SocketCard(CardEnums.Suit.HEARTHS, CardEnums.Value.KING) },
+                { new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.ACE),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.TWO),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.THREE),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.FOUR),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.FIVE),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.SIX),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.SEVEN),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.EIGHT),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.NINE),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.TEN),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.JACK),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.QUEEN),
+                        new SocketCard(CardEnums.Suit.SPADES, CardEnums.Value.KING) },
+                { new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.ACE),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.TWO),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.THREE),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.FOUR),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.FIVE),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.SIX),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.SEVEN),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.EIGHT),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.NINE),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.TEN),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.JACK),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.QUEEN),
+                        new SocketCard(CardEnums.Suit.DIAMONDS, CardEnums.Value.KING) },
+                { new SocketCard(CardEnums.Suit.JOKER, CardEnums.Value.JOKER1),
+                        new SocketCard(CardEnums.Suit.JOKER, CardEnums.Value.JOKER2) } };
     }
 
     public Game createGame(RuleSetSockets ruleSetSockets) {
@@ -88,7 +86,7 @@ public class GameManager {
     public void addPlayersToGame(Game game, ArrayList<Player> players) {
         game.setPlayers(players);
 
-        for (Player player: players) {
+        for (Player player : players) {
             player.setGame(game);
         }
     }
@@ -102,7 +100,7 @@ public class GameManager {
             }
         }
 
-        for (Rule rule: rules) {
+        for (Rule rule : rules) {
             for (SocketCard socketCard : rule.getCards()) {
                 socketCardWithRules[socketCard.getSuit()][socketCard.getValue()].addRule(rule);
             }
@@ -122,7 +120,6 @@ public class GameManager {
     public RuleSetSockets createRuleSet(RuleSet data) {
         //todo ad actual rules creating function
         ArrayList<Rule> rules = new ArrayList<>();
-
 
         for (CardRule cardRule : data.getCardRules()) {
             switch (values()[cardRule.getRuleEnum()]) {

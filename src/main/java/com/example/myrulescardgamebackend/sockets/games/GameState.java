@@ -48,8 +48,6 @@ public class GameState {
         return players;
     }
 
-
-
     public void playedCard(SocketCard socketCard) {
         this.discardPile.add(this.topSocketCard);
         this.topSocketCard = socketCard;

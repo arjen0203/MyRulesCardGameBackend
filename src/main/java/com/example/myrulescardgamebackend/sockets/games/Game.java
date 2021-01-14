@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.example.myrulescardgamebackend.CardEnums;
-import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 import com.example.myrulescardgamebackend.sockets.domain.CardData;
+import com.example.myrulescardgamebackend.sockets.domain.SocketCard;
 import com.example.myrulescardgamebackend.sockets.games.rules.Rule;
 
 public class Game {
@@ -30,7 +30,7 @@ public class Game {
 
     public void initGame() {
         //gives each player cardDomains
-        for (Player player: gameState.getPlayers()) {
+        for (Player player : gameState.getPlayers()) {
             ArrayList<SocketCard> socketCardDomains = new ArrayList<>();
             for (int i = 0; i < CARDSPERPLAYER; i++) {
                 socketCardDomains.add(pickCard());
@@ -46,11 +46,12 @@ public class Game {
         gameState.playedCard(pickCard());
     }
 
-
     public ArrayList<Player> getWinners() {
         ArrayList<Player> winners = new ArrayList<Player>();
-        for (Player player: this.gameState.getPlayers()) {
-            if (player.getCards().size() < 1) winners.add(player);
+        for (Player player : this.gameState.getPlayers()) {
+            if (player.getCards().size() < 1) {
+                winners.add(player);
+            }
         }
         return winners;
     }
@@ -106,7 +107,7 @@ public class Game {
     public void playCard(SocketCard socketCard, Player player) {
         player.getCards().remove(socketCard);
         if (socketCard.getRules() != null) {
-            for (Rule rule: socketCard.getRules()) {
+            for (Rule rule : socketCard.getRules()) {
                 rule.doRule(this);
             }
         }

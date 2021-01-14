@@ -11,7 +11,8 @@ public class SocketCard {
     private int value;
     private ArrayList<Rule> rules;
 
-    public SocketCard() {}
+    public SocketCard() {
+    }
 
     public SocketCard(SocketCard socketCard) {
         this.suit = socketCard.getSuit();

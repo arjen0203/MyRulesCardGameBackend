@@ -14,10 +14,8 @@ import com.example.myrulescardgamebackend.rest.repositories.RuleSetRepository;
 import com.example.myrulescardgamebackend.rest.repositories.UserRepository;
 import com.example.myrulescardgamebackend.rest.services.RuleSetService;
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.hibernate.criterion.Restrictions;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,13 +27,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path="/rulesets")
+@RequestMapping(path = "/rulesets")
 public class RuleSetController {
     private final RuleSetRepository ruleSetRepository;
     private final UserRepository userRepository;
     private final RuleSetService ruleSetService;
 
-    public RuleSetController(RuleSetRepository ruleSetRepository, UserRepository userRepository, RuleSetService ruleSetService) {
+    public RuleSetController(RuleSetRepository ruleSetRepository, UserRepository userRepository,
+            RuleSetService ruleSetService) {
         this.ruleSetRepository = ruleSetRepository;
         this.userRepository = userRepository;
         this.ruleSetService = ruleSetService;
@@ -43,7 +42,7 @@ public class RuleSetController {
 
     @CrossOrigin
     @Transactional
-    @PostMapping(path="/add")
+    @PostMapping(path = "/add")
     public ResponseEntity<?> addNewRuleSet(@RequestHeader("Authorization") String token,
             @Valid @RequestBody RuleSet ruleSet) {
         token = token.replace("Bearer ", "");
@@ -52,7 +51,9 @@ public class RuleSetController {
             JSONObject json = new JSONObject(decodedToken);
             String username = json.get("sub").toString();
             Optional<User> user = userRepository.findByUsername(username);
-            if (user.isEmpty()) return ResponseEntity.status(404).body("User not found");
+            if (user.isEmpty()) {
+                return ResponseEntity.status(404).body("User not found");
+            }
             ruleSet.setUser(user.get());
             ruleSetRepository.save(ruleSet);
             return ResponseEntity.ok(ruleSet);
@@ -80,14 +81,14 @@ public class RuleSetController {
             JSONObject json = new JSONObject(decodedToken);
             String username = json.get("sub").toString();
             Optional<User> user = userRepository.findByUsername(username);
-            if (user.isEmpty()) return ResponseEntity.status(404).body("User not found");
+            if (user.isEmpty()) {
+                return ResponseEntity.status(404).body("User not found");
+            }
             List<RuleSetSimple> ruleSets = ruleSetRepository.findRuleSetByUser(user);
             return ResponseEntity.ok(ruleSets);
         } catch (JSONException e) {
             return ResponseEntity.status(403).body("Unauthorized request");
         }
-
-
 
         //return ResponseEntity.status(404).body("Ruleset not found");
     }

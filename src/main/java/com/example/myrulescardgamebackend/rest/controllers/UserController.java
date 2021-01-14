@@ -22,12 +22,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(path="/user")
+@RequestMapping(path = "/user")
 public class UserController {
     private final UserService userService;
     private final UserValidator userValidator;
     private final UserRepository userRepository;
-
 
     public UserController(UserService userService, UserValidator userValidator, UserRepository userRepository) {
         this.userService = userService;
@@ -43,7 +42,9 @@ public class UserController {
             JSONObject json = new JSONObject(decodedToken);
             String username = json.get("sub").toString();
             Optional<User> user = userRepository.findByUsername(username);
-            if (user.isEmpty()) return ResponseEntity.status(404).body("User not found");
+            if (user.isEmpty()) {
+                return ResponseEntity.status(404).body("User not found");
+            }
             return ResponseEntity.ok(user.get());
         } catch (JSONException e) {
             return ResponseEntity.status(403).body("Unauthorized request");
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @CrossOrigin
-    @PostMapping(path="/add")
+    @PostMapping(path = "/add")
     public ResponseEntity<?> addNewUser(@Valid @RequestBody User user) {
         var result = userValidator.validate(user);
         if (result.isSuccess()) {

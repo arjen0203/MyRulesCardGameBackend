@@ -4,5 +4,6 @@ public class HostGame {
     public int gameId;
     public String hostName;
 
-    public HostGame() {}
+    public HostGame() {
+    }
 }

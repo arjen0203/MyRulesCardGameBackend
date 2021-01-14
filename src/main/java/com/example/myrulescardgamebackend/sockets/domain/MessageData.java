@@ -4,7 +4,8 @@ public class MessageData {
     public String message;
     public boolean isServerMessage;
 
-    public MessageData() {}
+    public MessageData() {
+    }
 
     public MessageData(String message) {
         this.message = message;

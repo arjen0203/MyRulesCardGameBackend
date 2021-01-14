@@ -8,7 +8,8 @@ public class PlayerData {
     public int cardAmount;
     public boolean isTurn;
 
-    public PlayerData() {}
+    public PlayerData() {
+    }
 
     public PlayerData(String name, int cardAmount, boolean isTurn) {
         this.name = name;

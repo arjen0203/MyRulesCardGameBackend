@@ -11,13 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 @Entity
 public class RuleSet {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int id;
 
     public String name;
@@ -25,7 +22,7 @@ public class RuleSet {
     @ManyToOne
     private User user;
 
-    @OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private List<CardRule> cardRules;
 
     public void setUser(User user) {

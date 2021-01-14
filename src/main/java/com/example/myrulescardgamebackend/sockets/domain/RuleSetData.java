@@ -17,5 +17,4 @@ public class RuleSetData {
         return cardRules;
     }
 
-
 }

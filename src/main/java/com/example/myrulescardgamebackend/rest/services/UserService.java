@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import com.example.myrulescardgamebackend.rest.repositories.UserRepository;
 import com.example.myrulescardgamebackend.rest.domain.User;
+import com.example.myrulescardgamebackend.rest.repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

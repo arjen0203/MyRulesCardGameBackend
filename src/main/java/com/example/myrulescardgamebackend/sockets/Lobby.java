@@ -1,9 +1,7 @@
 package com.example.myrulescardgamebackend.sockets;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import com.corundumstudio.socketio.SocketIOClient;
 import com.example.myrulescardgamebackend.sockets.games.Game;
 import com.example.myrulescardgamebackend.sockets.games.Player;
 

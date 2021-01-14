@@ -24,16 +24,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(SIGN_UP_URL, "/rulesets/get**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilter(new com.example.myrulescardgamebackend.rest.security.JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new com.example.myrulescardgamebackend.rest.security.JWTAuthorizationFilter(authenticationManager()))
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers(SIGN_UP_URL,
+                "/rulesets/get**").permitAll().anyRequest().authenticated().and().addFilter(
+                new com.example.myrulescardgamebackend.rest.security.JWTAuthenticationFilter(
+                        authenticationManager())).addFilter(
+                new com.example.myrulescardgamebackend.rest.security.JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
