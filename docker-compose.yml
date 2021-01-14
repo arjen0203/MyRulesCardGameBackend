@@ -9,10 +9,10 @@ services:
     ports:
       - "5001:8080"
       - "5002:5002"
-#  coverage:
-#    build: ./code-coverage
-#    image: battleship-coverage-image
-#    container_name: battleship-coverage
-#    restart: unless-stopped
-#    ports:
-#      - "6003:5000"
+  coverage:
+    build: ./code-coverage
+    image: battleship-coverage-image
+    container_name: battleship-coverage
+    restart: unless-stopped
+    ports:
+      - "5003:5000"
