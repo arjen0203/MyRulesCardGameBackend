@@ -37,7 +37,7 @@ public class SocketManager {
     }
 
     public void init(){
-        config.setPort(5002);
+        config.setPort(6002);
         config.setContext("/sockets");
         config.setHostname("0.0.0.0");
 
