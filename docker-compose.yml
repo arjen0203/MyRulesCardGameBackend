@@ -1,10 +1,18 @@
-version: "3"
 
+version: '3'
 services:
   backend:
     build: .
-    image: my-rules-card-game-backend-image
-    container_name: cardgame-backend
+    image: myrulescardgame-backend-image
+    container_name: myrulescardgame-backend
+    restart: unless-stopped
     ports:
       - "5001:8080"
       - "5002:5002"
+#  coverage:
+#    build: ./code-coverage
+#    image: battleship-coverage-image
+#    container_name: battleship-coverage
+#    restart: unless-stopped
+#    ports:
+#      - "6003:5000"
