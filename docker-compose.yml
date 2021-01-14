@@ -11,8 +11,8 @@ services:
       - "5002:5002"
   coverage:
     build: ./code-coverage
-    image: battleship-coverage-image
-    container_name: battleship-coverage
+    image: myrulescardgame-coverage-image
+    container_name: myrulescardgame-coverage
     restart: unless-stopped
     ports:
       - "5003:5000"
