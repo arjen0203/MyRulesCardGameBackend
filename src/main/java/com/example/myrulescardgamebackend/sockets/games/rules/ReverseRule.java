@@ -23,17 +23,12 @@ public class ReverseRule implements Rule {
     @Override
     public void doRule(Game game) {
         ArrayList<Player> turnOrder = game.getGameState().getTurnOrder();
-        ArrayList<Player> turnOrderFlipped = new ArrayList<>();
 
         Collections.reverse(turnOrder);
         Player currentPlr = turnOrder.get(turnOrder.size() - 1);
         turnOrder.remove(turnOrder.size() - 1);
         turnOrder.add(0, currentPlr);
 
-        //        turnOrderFlipped.add(turnOrder.get(0));
-        //        for (int i = turnOrder.size(); 1 > turnOrder.size(); i--) {
-        //            turnOrderFlipped.add(turnOrder.get(i - 1));
-        //        }
 
         for (Player plr : game.getGameState().getPlayers()) {
             plr.getSocket().sendEvent("message", new MessageData("[SERVER]: The turn order has been reversed!", true));
