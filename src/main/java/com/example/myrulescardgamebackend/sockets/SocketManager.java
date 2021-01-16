@@ -304,10 +304,12 @@ public class SocketManager {
         if (lobby == null) {
             return;
         }
-        ArrayList<PlayerData> playersData = new ArrayList<>();
-        if (playersData == null) {
+
+        if (lobby.getPlayers() == null) {
             return;
         }
+
+        ArrayList<PlayerData> playersData = new ArrayList<>();
         for (Player player : lobby.getPlayers()) {
             playersData.add(new PlayerData(player.getName(), player.getSocket().getSessionId()));
         }

@@ -1,5 +1,6 @@
 package com.example.myrulescardgamebackend.sockets;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import com.example.myrulescardgamebackend.sockets.games.Player;
 public class LobbyManager {
     HashMap<String, Lobby> lobbys = new HashMap<>();
     HashMap<UUID, Player> players = new HashMap<>();
+    Random random = new SecureRandom();
 
     public void CreateLobby(SocketIOClient socket, String hostName, Game game) {
         Lobby lobby = new Lobby(generateCode(), game);
@@ -73,7 +75,6 @@ public class LobbyManager {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 5;
-        Random random = new Random();
 
         String generatedString = random.ints(leftLimit, rightLimit + 1).filter(
                 i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength).collect(StringBuilder::new,
