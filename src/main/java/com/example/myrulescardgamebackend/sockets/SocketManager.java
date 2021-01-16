@@ -85,7 +85,7 @@ public class SocketManager {
             RuleSetSockets ruleSetSockets = gameManager.createRuleSet(ruleSet.get());
             Game game = gameManager.createGame(ruleSetSockets);
 
-            lobbyManager.CreateLobby(socket, data.hostName, game);
+            lobbyManager.createLobby(socket, data.hostName, game);
 
             socket.sendEvent("hostSuccess");
             System.out.println("lobby created success");

@@ -10,11 +10,11 @@ import com.example.myrulescardgamebackend.sockets.games.Game;
 import com.example.myrulescardgamebackend.sockets.games.Player;
 
 public class LobbyManager {
-    HashMap<String, Lobby> lobbys = new HashMap<>();
-    HashMap<UUID, Player> players = new HashMap<>();
-    Random random = new SecureRandom();
+    private HashMap<String, Lobby> lobbys = new HashMap<>();
+    private HashMap<UUID, Player> players = new HashMap<>();
+    private Random random = new SecureRandom();
 
-    public void CreateLobby(SocketIOClient socket, String hostName, Game game) {
+    public void createLobby(SocketIOClient socket, String hostName, Game game) {
         Lobby lobby = new Lobby(generateCode(), game);
         Player host = new Player(hostName, socket, lobby);
         lobby.setHost(host);
@@ -25,7 +25,7 @@ public class LobbyManager {
 
     public boolean lobbyExists(String code) {
         Lobby lobby = lobbys.get(code);
-        return(lobby == null);
+        return(lobby != null);
     }
 
     public void joinLobby(SocketIOClient socket, String code, String playerName) {
@@ -88,5 +88,13 @@ public class LobbyManager {
 
     public void removeLobby(String code) {
         lobbys.remove(code);
+    }
+
+    public HashMap<String, Lobby> getLobbys() {
+        return lobbys;
+    }
+
+    public HashMap<UUID, Player> getPlayers() {
+        return players;
     }
 }
