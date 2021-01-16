@@ -42,7 +42,7 @@ public class RuleSetController {
 
     @CrossOrigin
     @Transactional
-    @PostMapping(path = "/add")
+    @PostMapping
     public ResponseEntity<?> addNewRuleSet(@RequestHeader("Authorization") String token,
             @Valid @RequestBody RuleSet ruleSet) {
         token = token.replace("Bearer ", "");
@@ -63,7 +63,7 @@ public class RuleSetController {
     }
 
     @CrossOrigin
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity<?> getRuleSet(@RequestParam int id) {
         var ruleSet = ruleSetService.getRuleSetById(id);
         if (ruleSet.isPresent()) {
@@ -89,7 +89,5 @@ public class RuleSetController {
         } catch (JSONException e) {
             return ResponseEntity.status(403).body("Unauthorized request");
         }
-
-        //return ResponseEntity.status(404).body("Ruleset not found");
     }
 }
