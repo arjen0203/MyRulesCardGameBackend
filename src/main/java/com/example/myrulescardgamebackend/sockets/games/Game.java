@@ -49,7 +49,7 @@ public class Game {
     public ArrayList<Player> getWinners() {
         ArrayList<Player> winners = new ArrayList<Player>();
         for (Player player : this.gameState.getPlayers()) {
-            if (player.getCards().size() < 1) {
+            if (player.getCards().isEmpty()) {
                 winners.add(player);
             }
         }

@@ -25,10 +25,7 @@ public class LobbyManager {
 
     public boolean lobbyExists(String code) {
         Lobby lobby = lobbys.get(code);
-        if (lobby == null) {
-            return false;
-        }
-        return true;
+        return(lobby == null);
     }
 
     public void joinLobby(SocketIOClient socket, String code, String playerName) {
