@@ -10,9 +10,15 @@ import com.example.myrulescardgamebackend.sockets.games.Game;
 import com.example.myrulescardgamebackend.sockets.games.Player;
 
 public class LobbyManager {
-    private HashMap<String, Lobby> lobbys = new HashMap<>();
-    private HashMap<UUID, Player> players = new HashMap<>();
-    private Random random = new SecureRandom();
+    private HashMap<String, Lobby> lobbys;
+    private HashMap<UUID, Player> players;
+    private Random random;
+
+    public LobbyManager() {
+        lobbys = new HashMap<>();
+        players = new HashMap<>();
+        random = new SecureRandom();
+    }
 
     public void createLobby(SocketIOClient socket, String hostName, Game game) {
         Lobby lobby = new Lobby(generateCode(), game);
