@@ -34,7 +34,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/profile")
+    @GetMapping
     public ResponseEntity<?> getMe(@RequestHeader("Authorization") String token) {
         token = token.replace("Bearer ", "");
         String decodedToken = new String(Base64.decodeBase64(JWT.decode(token).getPayload()));
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @CrossOrigin
-    @PostMapping(path = "/add")
+    @PostMapping
     public ResponseEntity<?> addNewUser(@Valid @RequestBody User user) {
         var result = userValidator.validate(user);
         if (result.isSuccess()) {
