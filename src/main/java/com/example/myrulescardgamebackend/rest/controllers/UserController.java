@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @CrossOrigin
-    @PostMapping
+    @PostMapping(path = "/add")
     public ResponseEntity<?> addNewUser(@Valid @RequestBody User user) {
         var result = userValidator.validate(user);
         if (result.isSuccess()) {
